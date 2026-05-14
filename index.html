@@ -350,9 +350,6 @@
             placeholder="Selecciona una fecha disponible"
           />
 
-          <label for="time">Hora (si aplica)</label>
-          <input type="time" id="time" name="time" />
-
           <label for="people">Cantidad de personas</label>
           <input type="number" id="people" name="people" min="1" max="20" required placeholder="2" />
 
@@ -376,10 +373,6 @@
             <li>
               <span>Fecha:</span>
               <strong id="summaryDate">-</strong>
-            </li>
-            <li>
-              <span>Hora:</span>
-              <strong id="summaryTime">No aplica</strong>
             </li>
             <li>
               <span>Personas:</span>
@@ -418,11 +411,15 @@
               <strong>Banco Nacional</strong>
             </li>
             <li>
-              <span>Cuenta IBAN:</span>
+              <span>Cuenta IBAN en dolares (USD):</span>
+              <strong>CR17015108410026012345</strong>
+            </li>
+            <li>
+              <span>Cuenta IBAN en colones (CRC):</span>
               <strong>CR23015108410026012345</strong>
             </li>
             <li>
-              <span>Monto a depositar:</span>
+              <span>Monto a depositar (USD / CRC):</span>
               <strong id="paymentDeposit">-</strong>
             </li>
             <li>

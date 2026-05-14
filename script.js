@@ -22,13 +22,13 @@ revealElements.forEach((element) => observer.observe(element));
 
 const API_ENDPOINT = '/api/reservations';
 const TOUR_IMAGES_ENDPOINT = '/api/tours/images';
+const EXCHANGE_RATE_CRC_PER_USD = 470;
 
 const TOUR_CONFIG = {
   'Tour Rio Celeste (Costa Rica)': {
     slug: 'rio-celeste-costa-rica',
     tag: 'Costa Rica',
-    deposit: 10000,
-    requiresTime: false,
+    depositUsd: 65,
     nextDates: ['2026-05-25', '2026-06-08', '2026-06-22'],
     description:
       'Una experiencia natural ideal para quienes desean conocer uno de los rios mas impactantes de Costa Rica, con senderos, paisajes y acompanamiento durante todo el recorrido.',
@@ -43,8 +43,7 @@ const TOUR_CONFIG = {
   'Escapada Granada y Masaya (Nicaragua)': {
     slug: 'escapada-granada-masaya-nicaragua',
     tag: 'Nicaragua',
-    deposit: 15000,
-    requiresTime: false,
+    depositUsd: 95,
     nextDates: ['2026-05-30', '2026-06-13', '2026-06-27'],
     description:
       'Ruta cultural y de naturaleza para viajeros que desean explorar ciudad colonial, paseo en lancha y volcan en un solo itinerario.',
@@ -59,8 +58,7 @@ const TOUR_CONFIG = {
   'San Blas Escape (Panama)': {
     slug: 'san-blas-escape-panama',
     tag: 'Panama',
-    deposit: 25000,
-    requiresTime: true,
+    depositUsd: 149,
     nextDates: ['2026-06-05', '2026-06-19', '2026-07-03'],
     description:
       'Un plan de mar para desconectar en islas paradisiacas, con coordinacion previa y soporte por WhatsApp de inicio a fin.',
@@ -86,14 +84,11 @@ const form = document.getElementById('reservationForm');
 const formStatus = document.getElementById('formStatus');
 const tourField = document.getElementById('tour');
 const dateField = document.getElementById('date');
-const timeField = document.getElementById('time');
-const timeLabel = document.querySelector('label[for="time"]');
 const nextDatesHint = document.getElementById('nextDatesHint');
 
 const reservationFlow = document.getElementById('reservationFlow');
 const summaryTour = document.getElementById('summaryTour');
 const summaryDate = document.getElementById('summaryDate');
-const summaryTime = document.getElementById('summaryTime');
 const summaryPeople = document.getElementById('summaryPeople');
 const summaryDeposit = document.getElementById('summaryDeposit');
 const summaryStatus = document.getElementById('summaryStatus');
@@ -140,8 +135,7 @@ function getTourSettings(tourName) {
   return TOUR_CONFIG[tourName] || {
     slug: '',
     tag: 'Tour',
-    deposit: 10000,
-    requiresTime: false,
+    depositUsd: 0,
     nextDates: [],
     description: '',
     includes: [],
@@ -174,6 +168,24 @@ function formatCRC(amount) {
     currency: 'CRC',
     maximumFractionDigits: 0,
   }).format(Number(amount || 0));
+}
+
+function formatUSD(amount) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  }).format(Number(amount || 0));
+}
+
+function convertUsdToCrc(amountUsd) {
+  return Math.round(Number(amountUsd || 0) * EXCHANGE_RATE_CRC_PER_USD);
+}
+
+function formatDepositAmount(amountUsd) {
+  const usd = formatUSD(amountUsd);
+  const crc = formatCRC(convertUsdToCrc(amountUsd));
+  return `${usd} (${crc} aprox.)`;
 }
 
 function formatDateLong(dateValue) {
@@ -328,10 +340,9 @@ function showReservationFlow(reservation) {
   reservationFlow.hidden = false;
   summaryTour.textContent = reservation.tour;
   summaryDate.textContent = formatDateLong(reservation.date);
-  summaryTime.textContent = reservation.time || 'No aplica';
   summaryPeople.textContent = reservation.people;
-  summaryDeposit.textContent = formatCRC(reservation.deposit);
-  paymentDeposit.textContent = formatCRC(reservation.deposit);
+  summaryDeposit.textContent = formatDepositAmount(reservation.depositUsd);
+  paymentDeposit.textContent = formatDepositAmount(reservation.depositUsd);
   setStatusPill(reservation.status);
 }
 
@@ -349,24 +360,6 @@ function renderTourDateChips() {
       .map((date) => `<span class="date-chip">${formatDateShort(date)}</span>`)
       .join('');
   });
-}
-
-function updateTimeRequirement() {
-  if (!tourField || !timeField || !timeLabel) {
-    return;
-  }
-
-  const selectedTour = tourField.value;
-  const settings = getTourSettings(selectedTour);
-
-  if (settings.requiresTime) {
-    timeField.required = true;
-    timeLabel.textContent = 'Hora (requerida para este tour)';
-  } else {
-    timeField.required = false;
-    timeLabel.textContent = 'Hora (si aplica)';
-    timeField.value = '';
-  }
 }
 
 function configureDatePickerForTour(tourName) {
@@ -582,7 +575,6 @@ function applyTourSelection(selectedTour) {
   }
 
   tourField.value = selectedTour;
-  updateTimeRequirement();
   syncDateHint();
 
   if (formStatus) {
@@ -706,14 +698,12 @@ document.addEventListener('keydown', (event) => {
 
 if (tourField) {
   tourField.addEventListener('change', () => {
-    updateTimeRequirement();
     syncDateHint();
   });
 }
 
 if (form) {
   initializeDatePicker();
-  updateTimeRequirement();
   syncDateHint();
 
   form.addEventListener('submit', (event) => {
@@ -727,7 +717,6 @@ if (form) {
       email: form.email.value.trim(),
       tour: form.tour.value.trim(),
       date: selectedDate,
-      time: form.time.value,
       people: form.people.value,
       message: form.message.value.trim(),
     };
@@ -739,11 +728,6 @@ if (form) {
       return;
     }
 
-    if (settings.requiresTime && !data.time) {
-      formStatus.textContent = 'Este tour requiere una hora de salida. Selecciona la hora para continuar.';
-      return;
-    }
-
     if (!isDateAllowedForTour(data.tour, data.date)) {
       formStatus.textContent = 'Selecciona una fecha habilitada en el calendario para este tour.';
       return;
@@ -751,7 +735,8 @@ if (form) {
 
     activeReservation = {
       ...data,
-      deposit: settings.deposit,
+      depositUsd: settings.depositUsd,
+      depositCrc: convertUsdToCrc(settings.depositUsd),
       status: 'Pendiente de pago',
     };
 
@@ -802,10 +787,10 @@ if (proofForm) {
     payload.append('email', activeReservation.email);
     payload.append('tour', activeReservation.tour);
     payload.append('date', activeReservation.date);
-    payload.append('time', activeReservation.time || '');
     payload.append('people', activeReservation.people);
     payload.append('message', activeReservation.message || '');
-    payload.append('deposit', String(activeReservation.deposit));
+    payload.append('depositUsd', String(activeReservation.depositUsd));
+    payload.append('depositCrc', String(activeReservation.depositCrc));
     payload.append('paymentMethod', paymentMethod);
     payload.append('proofFile', proofFile);
 

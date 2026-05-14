@@ -25,7 +25,9 @@ const SUPPORT_WHATSAPP = process.env.SUPPORT_WHATSAPP || '+50670000000';
 const PAYMENT_SINPE = process.env.PAYMENT_SINPE || '+50688887777';
 const PAYMENT_OWNER = process.env.PAYMENT_OWNER || 'Dijes Tours CR S.A.';
 const PAYMENT_BANK = process.env.PAYMENT_BANK || 'Banco Nacional';
-const PAYMENT_IBAN = process.env.PAYMENT_IBAN || 'CR23015108410026012345';
+const PAYMENT_IBAN_USD = process.env.PAYMENT_IBAN_USD || '';
+const PAYMENT_IBAN_CRC = process.env.PAYMENT_IBAN_CRC || process.env.PAYMENT_IBAN || 'CR23015108410026012345';
+const EXCHANGE_RATE_CRC_PER_USD = Number(process.env.EXCHANGE_RATE_CRC_PER_USD || 470);
 
 const PROJECT_ROOT = __dirname;
 const RECEIPTS_DIR = path.join(PROJECT_ROOT, 'comprobantes');
@@ -186,7 +188,8 @@ function assertSmtpConfig() {
 
 function buildReservationPayload(body, filename) {
   const reservationId = `RSV-${Date.now()}`;
-  const deposit = Number(body.deposit || 0);
+  const depositUsd = Number(body.depositUsd || body.deposit || 0);
+  const depositCrc = Number(body.depositCrc || Math.round(depositUsd * EXCHANGE_RATE_CRC_PER_USD));
 
   return {
     reservationId,
@@ -197,18 +200,20 @@ function buildReservationPayload(body, filename) {
     email: String(body.email || '').trim(),
     tour: String(body.tour || '').trim(),
     date: String(body.date || '').trim(),
-    time: String(body.time || '').trim(),
     people: String(body.people || '').trim(),
     message: String(body.message || '').trim(),
     paymentMethod: String(body.paymentMethod || '').trim(),
-    deposit,
+    depositUsd,
+    depositCrc,
     proofFileName: filename,
     proofUrl: `${PUBLIC_BASE_URL}/comprobantes/${filename}`,
     paymentInfo: {
       sinpe: PAYMENT_SINPE,
       owner: PAYMENT_OWNER,
       bank: PAYMENT_BANK,
-      iban: PAYMENT_IBAN,
+      ibanUsd: PAYMENT_IBAN_USD,
+      ibanCrc: PAYMENT_IBAN_CRC,
+      exchangeRate: EXCHANGE_RATE_CRC_PER_USD,
     },
     support: {
       email: SUPPORT_EMAIL,
@@ -267,10 +272,9 @@ function buildCustomerEmailHtml(data) {
         <tr><td style="padding:8px;border:1px solid #dce3ef;">Codigo</td><td style="padding:8px;border:1px solid #dce3ef;">${escapeHtml(data.reservationId)}</td></tr>
         <tr><td style="padding:8px;border:1px solid #dce3ef;">Tour</td><td style="padding:8px;border:1px solid #dce3ef;">${escapeHtml(data.tour)}</td></tr>
         <tr><td style="padding:8px;border:1px solid #dce3ef;">Fecha</td><td style="padding:8px;border:1px solid #dce3ef;">${escapeHtml(data.date)}</td></tr>
-        <tr><td style="padding:8px;border:1px solid #dce3ef;">Hora</td><td style="padding:8px;border:1px solid #dce3ef;">${escapeHtml(data.time || 'No aplica')}</td></tr>
         <tr><td style="padding:8px;border:1px solid #dce3ef;">Personas</td><td style="padding:8px;border:1px solid #dce3ef;">${escapeHtml(data.people)}</td></tr>
         <tr><td style="padding:8px;border:1px solid #dce3ef;">Metodo de pago</td><td style="padding:8px;border:1px solid #dce3ef;">${escapeHtml(data.paymentMethod)}</td></tr>
-        <tr><td style="padding:8px;border:1px solid #dce3ef;">Monto a depositar</td><td style="padding:8px;border:1px solid #dce3ef;">${formatCrc(data.deposit)}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #dce3ef;">Monto a depositar</td><td style="padding:8px;border:1px solid #dce3ef;">${escapeHtml(formatDepositDisplay(data.depositUsd, data.depositCrc, data.paymentInfo.exchangeRate))}</td></tr>
         ${messageRow}
       </table>
 
@@ -278,7 +282,8 @@ function buildCustomerEmailHtml(data) {
       <p style="margin:0;">SINPE: <strong>${escapeHtml(data.paymentInfo.sinpe)}</strong></p>
       <p style="margin:0;">Titular: <strong>${escapeHtml(data.paymentInfo.owner)}</strong></p>
       <p style="margin:0;">Banco: <strong>${escapeHtml(data.paymentInfo.bank)}</strong></p>
-      <p style="margin:0 0 12px;">IBAN: <strong>${escapeHtml(data.paymentInfo.iban)}</strong></p>
+      <p style="margin:0;">IBAN USD: <strong>${escapeHtml(data.paymentInfo.ibanUsd || 'No configurada')}</strong></p>
+      <p style="margin:0 0 12px;">IBAN CRC: <strong>${escapeHtml(data.paymentInfo.ibanCrc || 'No configurada')}</strong></p>
 
       <p>Si aun no has realizado el pago, por favor hazlo a la cuenta indicada y envia comprobante a <strong>${escapeHtml(data.support.email)}</strong> o al WhatsApp <strong>${escapeHtml(data.support.whatsapp)}</strong>.</p>
       <p>Comprobante recibido: <a href="${escapeHtml(data.proofUrl)}" target="_blank" rel="noopener">${escapeHtml(data.proofUrl)}</a></p>
@@ -304,10 +309,9 @@ function buildAdminEmailHtml(data) {
         <tr><td style="padding:8px;border:1px solid #dce3ef;">Estado</td><td style="padding:8px;border:1px solid #dce3ef;">${escapeHtml(data.status)}</td></tr>
         <tr><td style="padding:8px;border:1px solid #dce3ef;">Tour</td><td style="padding:8px;border:1px solid #dce3ef;">${escapeHtml(data.tour)}</td></tr>
         <tr><td style="padding:8px;border:1px solid #dce3ef;">Fecha</td><td style="padding:8px;border:1px solid #dce3ef;">${escapeHtml(data.date)}</td></tr>
-        <tr><td style="padding:8px;border:1px solid #dce3ef;">Hora</td><td style="padding:8px;border:1px solid #dce3ef;">${escapeHtml(data.time || 'No aplica')}</td></tr>
         <tr><td style="padding:8px;border:1px solid #dce3ef;">Personas</td><td style="padding:8px;border:1px solid #dce3ef;">${escapeHtml(data.people)}</td></tr>
         <tr><td style="padding:8px;border:1px solid #dce3ef;">Metodo de pago</td><td style="padding:8px;border:1px solid #dce3ef;">${escapeHtml(data.paymentMethod)}</td></tr>
-        <tr><td style="padding:8px;border:1px solid #dce3ef;">Monto a depositar</td><td style="padding:8px;border:1px solid #dce3ef;">${formatCrc(data.deposit)}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #dce3ef;">Monto a depositar</td><td style="padding:8px;border:1px solid #dce3ef;">${escapeHtml(formatDepositDisplay(data.depositUsd, data.depositCrc, data.paymentInfo.exchangeRate))}</td></tr>
         <tr><td style="padding:8px;border:1px solid #dce3ef;">Cliente</td><td style="padding:8px;border:1px solid #dce3ef;">${escapeHtml(data.name)}</td></tr>
         <tr><td style="padding:8px;border:1px solid #dce3ef;">WhatsApp</td><td style="padding:8px;border:1px solid #dce3ef;">${escapeHtml(data.whatsapp)}</td></tr>
         <tr><td style="padding:8px;border:1px solid #dce3ef;">Correo</td><td style="padding:8px;border:1px solid #dce3ef;">${escapeHtml(data.email)}</td></tr>
@@ -322,7 +326,8 @@ function buildAdminEmailHtml(data) {
       <p style="margin:0;">SINPE: <strong>${escapeHtml(data.paymentInfo.sinpe)}</strong></p>
       <p style="margin:0;">Titular: <strong>${escapeHtml(data.paymentInfo.owner)}</strong></p>
       <p style="margin:0;">Banco: <strong>${escapeHtml(data.paymentInfo.bank)}</strong></p>
-      <p style="margin:0;">IBAN: <strong>${escapeHtml(data.paymentInfo.iban)}</strong></p>
+      <p style="margin:0;">IBAN USD: <strong>${escapeHtml(data.paymentInfo.ibanUsd || 'No configurada')}</strong></p>
+      <p style="margin:0;">IBAN CRC: <strong>${escapeHtml(data.paymentInfo.ibanCrc || 'No configurada')}</strong></p>
     </div>
   `;
 }
@@ -333,6 +338,20 @@ function formatCrc(value) {
     currency: 'CRC',
     maximumFractionDigits: 0,
   }).format(Number(value || 0));
+}
+
+function formatUsd(value) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  }).format(Number(value || 0));
+}
+
+function formatDepositDisplay(usdValue, crcValue, exchangeRate) {
+  const usd = formatUsd(usdValue);
+  const crc = formatCrc(crcValue);
+  return `${usd} (${crc} aprox. a TC ${exchangeRate})`;
 }
 
 function escapeHtml(value) {

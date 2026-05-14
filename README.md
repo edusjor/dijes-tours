@@ -27,6 +27,7 @@ Luego abre:
 - Cliente crea pre-reserva.
 - Cada tour muestra proximas salidas y boton `Detalles` (popup con incluye/no incluye + boton reservar).
 - El calendario de `Fecha deseada` solo permite fechas disponibles segun el tour seleccionado.
+- El monto de pago se muestra en USD y, entre parentesis, su conversion aproximada a CRC usando tipo de cambio configurable.
 - Cliente sube comprobante.
 - El servidor guarda el archivo en `comprobantes/` con formato de fecha-hora.
 - El servidor genera URL publica: `dominio.com/comprobantes/archivo.ext`.
@@ -78,5 +79,7 @@ Revisa y completa en `.env`:
 - `PAYMENT_SINPE`
 - `PAYMENT_OWNER`
 - `PAYMENT_BANK`
-- `PAYMENT_IBAN`
+- `PAYMENT_IBAN_USD`
+- `PAYMENT_IBAN_CRC`
+- `EXCHANGE_RATE_CRC_PER_USD`
 - `PUBLIC_BASE_URL`
