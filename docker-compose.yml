@@ -1,0 +1,11 @@
+services:
+  dijes-tours:
+    build: .
+    container_name: dijes-tours
+    ports:
+      - "40353:40353"
+    env_file:
+      - .env
+    volumes:
+      - ./comprobantes:/app/comprobantes
+    restart: unless-stopped

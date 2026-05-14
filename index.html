@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Landing Demo | Tours Centroamerica</title>
+  <meta
+    name="description"
+    content="Landing de ejemplo para mostrar 3 tours con pre-reserva, validacion por SINPE y envio automatico de correos."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-orb orb-1" aria-hidden="true"></div>
+  <div class="bg-orb orb-2" aria-hidden="true"></div>
+
+  <header class="hero" id="inicio">
+    <nav class="top-nav">
+      <a href="#inicio" class="brand">Dijes Tours</a>
+      <div class="nav-links">
+        <a href="#tours">Tours</a>
+        <a href="#reserva">Reserva</a>
+        <a href="#contacto">Contacto</a>
+      </div>
+    </nav>
+
+    <div class="hero-content container">
+      <div class="hero-copy" data-reveal>
+        <p class="eyebrow">Experiencias Curadas En Centroamerica</p>
+        <h1>Tours seleccionados para vivir Costa Rica de una forma diferente</h1>
+        <p class="lead">
+          Explora nuestras experiencias disponibles y reserva facilmente por WhatsApp o formulario.
+          Te acompanamos en cada paso para que disfrutes tu viaje sin complicaciones.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#tours" class="btn btn-primary">Ver tours disponibles</a>
+          <a
+            href="https://wa.me/50670000000?text=Hola%20quiero%20informacion%20sobre%20los%20tours"
+            class="btn btn-ghost"
+            target="_blank"
+            rel="noopener"
+          >
+            Reservar por WhatsApp
+          </a>
+        </div>
+
+        <ul class="quick-points">
+          <li>Atencion personalizada</li>
+          <li>Reserva rapida y guiada</li>
+          <li>Confirmacion por WhatsApp</li>
+        </ul>
+      </div>
+
+      <div class="hero-visual" data-reveal>
+        <img
+          src="https://picsum.photos/seed/hero-costa-rica/900/1100"
+          alt="Vista tropical para portada de tours"
+        />
+        <div class="floating-note">
+          <strong>+120</strong>
+          <span>reservas gestionadas en la temporada pasada</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section container" id="tours">
+      <div class="section-header" data-reveal>
+        <p class="eyebrow">Tres Experiencias Destacadas</p>
+        <h2>Tours disponibles para Costa Rica, Nicaragua y Panama</h2>
+      </div>
+
+      <div class="tour-grid">
+        <article class="tour-card" data-reveal data-tour="Tour Rio Celeste (Costa Rica)">
+          <div class="tour-media" data-tour="Tour Rio Celeste (Costa Rica)">
+            <button
+              type="button"
+              class="tour-media-nav tour-media-prev"
+              data-tour="Tour Rio Celeste (Costa Rica)"
+              data-direction="-1"
+              aria-label="Imagen anterior"
+            >
+              &lsaquo;
+            </button>
+            <img
+              src="https://picsum.photos/seed/rio-celeste-costa-rica/1200/800"
+              alt="Tour Rio Celeste en Costa Rica"
+              class="tour-image tour-image-clickable"
+              data-tour="Tour Rio Celeste (Costa Rica)"
+            />
+            <button
+              type="button"
+              class="tour-media-nav tour-media-next"
+              data-tour="Tour Rio Celeste (Costa Rica)"
+              data-direction="1"
+              aria-label="Siguiente imagen"
+            >
+              &rsaquo;
+            </button>
+            <button
+              type="button"
+              class="tour-media-zoom"
+              data-tour="Tour Rio Celeste (Costa Rica)"
+              aria-label="Ver imagenes grandes"
+            >
+              Ver fotos
+            </button>
+            <span class="tour-media-count" data-tour-counter="Tour Rio Celeste (Costa Rica)">1 / 1</span>
+          </div>
+          <div class="tour-body">
+            <span class="tag">Costa Rica</span>
+            <h3>Tour Rio Celeste</h3>
+            <p class="price">Desde $65 por persona</p>
+            <ul class="tour-meta">
+              <li><strong>Duracion:</strong> 1 dia</li>
+              <li><strong>Lugar:</strong> Parque Nacional Volcan Tenorio</li>
+              <li><strong>Incluye:</strong> transporte, guia y entrada</li>
+            </ul>
+            <div class="next-dates-wrap">
+              <p class="next-dates-title">Proximas salidas</p>
+              <div class="date-chips" data-next-dates-for="Tour Rio Celeste (Costa Rica)"></div>
+            </div>
+            <p class="tour-copy">
+              Recorrido ideal para quienes desean naturaleza viva, senderos y paisajes impresionantes.
+            </p>
+            <div class="tour-actions">
+              <button
+                type="button"
+                class="btn btn-ghost btn-block details-tour-btn"
+                data-tour="Tour Rio Celeste (Costa Rica)"
+              >
+                Detalles
+              </button>
+              <a
+                class="btn btn-primary btn-block reserve-tour-btn"
+                href="#reserva"
+                data-tour="Tour Rio Celeste (Costa Rica)"
+              >
+                Reservar este tour
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="tour-card" data-reveal data-tour="Escapada Granada y Masaya (Nicaragua)">
+          <div class="tour-media" data-tour="Escapada Granada y Masaya (Nicaragua)">
+            <button
+              type="button"
+              class="tour-media-nav tour-media-prev"
+              data-tour="Escapada Granada y Masaya (Nicaragua)"
+              data-direction="-1"
+              aria-label="Imagen anterior"
+            >
+              &lsaquo;
+            </button>
+            <img
+              src="https://picsum.photos/seed/granada-nicaragua-tour/1200/800"
+              alt="Tour Granada y Volcan Masaya en Nicaragua"
+              class="tour-image tour-image-clickable"
+              data-tour="Escapada Granada y Masaya (Nicaragua)"
+            />
+            <button
+              type="button"
+              class="tour-media-nav tour-media-next"
+              data-tour="Escapada Granada y Masaya (Nicaragua)"
+              data-direction="1"
+              aria-label="Siguiente imagen"
+            >
+              &rsaquo;
+            </button>
+            <button
+              type="button"
+              class="tour-media-zoom"
+              data-tour="Escapada Granada y Masaya (Nicaragua)"
+              aria-label="Ver imagenes grandes"
+            >
+              Ver fotos
+            </button>
+            <span class="tour-media-count" data-tour-counter="Escapada Granada y Masaya (Nicaragua)">1 / 1</span>
+          </div>
+          <div class="tour-body">
+            <span class="tag">Nicaragua</span>
+            <h3>Escapada Granada y Masaya</h3>
+            <p class="price">Desde $95 por persona</p>
+            <ul class="tour-meta">
+              <li><strong>Duracion:</strong> 2 dias / 1 noche</li>
+              <li><strong>Lugar:</strong> Granada e Isletas, Nicaragua</li>
+              <li><strong>Incluye:</strong> transporte, guia local y lancha</li>
+            </ul>
+            <div class="next-dates-wrap">
+              <p class="next-dates-title">Proximas salidas</p>
+              <div class="date-chips" data-next-dates-for="Escapada Granada y Masaya (Nicaragua)"></div>
+            </div>
+            <p class="tour-copy">
+              Descubre arquitectura colonial, volcan activo y atardecer sobre el lago con una ruta completa.
+            </p>
+            <div class="tour-actions">
+              <button
+                type="button"
+                class="btn btn-ghost btn-block details-tour-btn"
+                data-tour="Escapada Granada y Masaya (Nicaragua)"
+              >
+                Detalles
+              </button>
+              <a
+                class="btn btn-primary btn-block reserve-tour-btn"
+                href="#reserva"
+                data-tour="Escapada Granada y Masaya (Nicaragua)"
+              >
+                Reservar este tour
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="tour-card" data-reveal data-tour="San Blas Escape (Panama)">
+          <div class="tour-media" data-tour="San Blas Escape (Panama)">
+            <button
+              type="button"
+              class="tour-media-nav tour-media-prev"
+              data-tour="San Blas Escape (Panama)"
+              data-direction="-1"
+              aria-label="Imagen anterior"
+            >
+              &lsaquo;
+            </button>
+            <img
+              src="https://picsum.photos/seed/san-blas-panama-tour/1200/800"
+              alt="Tour Islas San Blas en Panama"
+              class="tour-image tour-image-clickable"
+              data-tour="San Blas Escape (Panama)"
+            />
+            <button
+              type="button"
+              class="tour-media-nav tour-media-next"
+              data-tour="San Blas Escape (Panama)"
+              data-direction="1"
+              aria-label="Siguiente imagen"
+            >
+              &rsaquo;
+            </button>
+            <button
+              type="button"
+              class="tour-media-zoom"
+              data-tour="San Blas Escape (Panama)"
+              aria-label="Ver imagenes grandes"
+            >
+              Ver fotos
+            </button>
+            <span class="tour-media-count" data-tour-counter="San Blas Escape (Panama)">1 / 1</span>
+          </div>
+          <div class="tour-body">
+            <span class="tag">Panama</span>
+            <h3>San Blas Escape</h3>
+            <p class="price">Desde $149 por persona</p>
+            <ul class="tour-meta">
+              <li><strong>Duracion:</strong> 2 dias / 1 noche</li>
+              <li><strong>Lugar:</strong> Islas San Blas, Panama</li>
+              <li><strong>Incluye:</strong> traslados, lancha, hospedaje basico</li>
+            </ul>
+            <div class="next-dates-wrap">
+              <p class="next-dates-title">Proximas salidas</p>
+              <div class="date-chips" data-next-dates-for="San Blas Escape (Panama)"></div>
+            </div>
+            <p class="tour-copy">
+              Una opcion para desconectar en playas de agua cristalina con experiencia organizada de principio a fin.
+            </p>
+            <div class="tour-actions">
+              <button
+                type="button"
+                class="btn btn-ghost btn-block details-tour-btn"
+                data-tour="San Blas Escape (Panama)"
+              >
+                Detalles
+              </button>
+              <a
+                class="btn btn-primary btn-block reserve-tour-btn"
+                href="#reserva"
+                data-tour="San Blas Escape (Panama)"
+              >
+                Reservar este tour
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section container" id="reserva">
+      <div class="reservation-layout">
+        <div class="reservation-copy" data-reveal>
+          <p class="eyebrow">Formulario De Reserva</p>
+          <h2>Reserva tu tour en minutos, sin enredos</h2>
+          <p>
+            Completa tus datos, elige tu fecha y envia el comprobante del deposito.
+            Nosotros revisamos todo y te confirmamos por WhatsApp y correo.
+          </p>
+
+          <div class="steps">
+            <div class="step">
+              <span>1</span>
+              <p>Elige tu tour y completa el formulario con tus datos.</p>
+            </div>
+            <div class="step">
+              <span>2</span>
+              <p>Revisa el resumen y realiza tu deposito por SINPE o transferencia.</p>
+            </div>
+            <div class="step">
+              <span>3</span>
+              <p>Sube el comprobante y te confirmamos tu reserva lo antes posible.</p>
+            </div>
+          </div>
+        </div>
+
+        <form class="reservation-form" id="reservationForm" data-reveal>
+          <label for="name">Nombre</label>
+          <input type="text" id="name" name="name" required placeholder="Tu nombre" />
+
+          <label for="whatsapp">WhatsApp</label>
+          <input type="tel" id="whatsapp" name="whatsapp" required placeholder="+506 8888 8888" />
+
+          <label for="email">Correo</label>
+          <input type="email" id="email" name="email" required placeholder="tu-correo@ejemplo.com" />
+
+          <label for="tour">Tour de interes</label>
+          <select id="tour" name="tour" required>
+            <option value="">Selecciona un tour</option>
+            <option>Tour Rio Celeste (Costa Rica)</option>
+            <option>Escapada Granada y Masaya (Nicaragua)</option>
+            <option>San Blas Escape (Panama)</option>
+          </select>
+          <p class="next-dates-hint" id="nextDatesHint">Selecciona un tour para ver proximas fechas disponibles.</p>
+
+          <label for="date">Fecha deseada</label>
+          <input
+            type="text"
+            id="date"
+            name="date"
+            required
+            readonly
+            placeholder="Selecciona una fecha disponible"
+          />
+
+          <label for="time">Hora (si aplica)</label>
+          <input type="time" id="time" name="time" />
+
+          <label for="people">Cantidad de personas</label>
+          <input type="number" id="people" name="people" min="1" max="20" required placeholder="2" />
+
+          <label for="message">Mensaje adicional</label>
+          <textarea id="message" name="message" rows="4" placeholder="Ejemplo: viajamos con ninos y queremos saber opciones."></textarea>
+
+          <button type="submit" class="btn btn-primary btn-block">Crear pre-reserva</button>
+          <p class="form-status" id="formStatus" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <div class="reservation-flow" id="reservationFlow" data-reveal hidden>
+        <article class="summary-card">
+          <p class="eyebrow">Resumen De Solicitud</p>
+          <h3>Pre-reserva creada</h3>
+          <ul class="summary-list">
+            <li>
+              <span>Tour seleccionado:</span>
+              <strong id="summaryTour">-</strong>
+            </li>
+            <li>
+              <span>Fecha:</span>
+              <strong id="summaryDate">-</strong>
+            </li>
+            <li>
+              <span>Hora:</span>
+              <strong id="summaryTime">No aplica</strong>
+            </li>
+            <li>
+              <span>Personas:</span>
+              <strong id="summaryPeople">-</strong>
+            </li>
+            <li>
+              <span>Monto a depositar:</span>
+              <strong id="summaryDeposit">-</strong>
+            </li>
+            <li>
+              <span>Estado:</span>
+              <strong id="summaryStatus" class="status-pill status-payment">Pendiente de pago</strong>
+            </li>
+          </ul>
+        </article>
+
+        <article class="payment-card">
+          <h3>Paso siguiente: pago y comprobante</h3>
+          <p class="payment-help">
+            Para completar tu solicitud de reserva, realiza el deposito al siguiente SINPE o cuenta bancaria. Luego
+            sube la captura del comprobante para validar tu reserva. Si aun no has pagado, puedes hacerlo y enviarnos
+            el comprobante por este formulario.
+          </p>
+
+          <ul class="payment-data">
+            <li>
+              <span>Numero SINPE:</span>
+              <strong>+506 8888 7777</strong>
+            </li>
+            <li>
+              <span>Nombre del titular:</span>
+              <strong>Dijes Tours CR S.A.</strong>
+            </li>
+            <li>
+              <span>Banco:</span>
+              <strong>Banco Nacional</strong>
+            </li>
+            <li>
+              <span>Cuenta IBAN:</span>
+              <strong>CR23015108410026012345</strong>
+            </li>
+            <li>
+              <span>Monto a depositar:</span>
+              <strong id="paymentDeposit">-</strong>
+            </li>
+            <li>
+              <span>Soporte de pago:</span>
+              <strong>pagos@dijestours.com / WhatsApp +506 7000 0000</strong>
+            </li>
+          </ul>
+
+          <form id="proofForm" class="proof-form">
+            <label for="paymentMethod">Metodo de pago</label>
+            <select id="paymentMethod" name="paymentMethod" required>
+              <option value="">Selecciona un metodo</option>
+              <option value="SINPE Movil">SINPE Movil</option>
+              <option value="Transferencia bancaria">Transferencia bancaria</option>
+              <option value="Deposito bancario">Deposito bancario</option>
+            </select>
+
+            <label for="proofFile">Sube captura del comprobante</label>
+            <input
+              type="file"
+              id="proofFile"
+              name="proofFile"
+              accept=".png,.jpg,.jpeg,.webp,.pdf"
+              required
+            />
+            <button type="submit" class="btn btn-primary btn-block" id="proofSubmitBtn">Enviar comprobante y solicitud</button>
+            <p class="form-status" id="proofStatus" aria-live="polite"></p>
+            <a id="proofPublicLink" class="proof-public-link" href="#" target="_blank" rel="noopener" hidden>Ver enlace del comprobante cargado</a>
+          </form>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="confianza">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Seccion De Confianza</p>
+          <h2>Tu cliente siente seguridad antes de reservar</h2>
+        </div>
+
+        <div class="trust-grid">
+          <article class="trust-item" data-reveal>
+            <h3>Atencion personalizada</h3>
+            <p>Respuestas directas y acompanamiento desde la consulta inicial hasta el cierre del tour.</p>
+          </article>
+          <article class="trust-item" data-reveal>
+            <h3>Reservas rapidas</h3>
+            <p>Proceso agil para confirmar fecha y cupos en pocos mensajes.</p>
+          </article>
+          <article class="trust-item" data-reveal>
+            <h3>Experiencias organizadas</h3>
+            <p>Logistica clara, itinerarios definidos y comunicacion constante por WhatsApp.</p>
+          </article>
+          <article class="trust-item" data-reveal>
+            <h3>Fotos y testimonios reales</h3>
+            <p>Integra evidencia social para aumentar conversion y credibilidad del servicio.</p>
+          </article>
+        </div>
+
+        <div class="testimonial-grid">
+          <blockquote class="testimonial" data-reveal>
+            <p>"Super recomendado. Todo organizado y rapido por WhatsApp. Fue facil reservar."</p>
+            <cite>- Andrea M., San Jose</cite>
+          </blockquote>
+          <blockquote class="testimonial" data-reveal>
+            <p>"Tomamos el tour de Nicaragua y el soporte fue excelente durante todo el trayecto."</p>
+            <cite>- Carlos R., Heredia</cite>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section class="final-cta" id="contacto">
+    <div class="container" data-reveal>
+      <p class="eyebrow">Contacto Final</p>
+      <h2>Listo para reservar tu experiencia?</h2>
+      <p>
+        Escribenos y te ayudamos a confirmar fecha, disponibilidad y detalles del tour ideal para tu viaje.
+      </p>
+      <div class="hero-actions">
+        <a
+          href="https://wa.me/50670000000?text=Hola%20quiero%20reservar%20mi%20experiencia"
+          class="btn btn-primary"
+          target="_blank"
+          rel="noopener"
+        >
+          Ir a WhatsApp
+        </a>
+        <a href="#reserva" class="btn btn-ghost">Completar formulario</a>
+      </div>
+    </div>
+  </section>
+
+  <a
+    href="https://wa.me/50670000000?text=Hola%20quiero%20informacion%20de%20los%20tours"
+    class="whatsapp-float"
+    target="_blank"
+    rel="noopener"
+    aria-label="Abrir WhatsApp"
+  >
+    WA
+  </a>
+
+  <section class="gallery-modal" id="galleryModal" hidden>
+    <div class="gallery-modal-backdrop" id="galleryModalBackdrop"></div>
+    <article
+      class="gallery-modal-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="galleryModalTitle"
+    >
+      <button type="button" class="gallery-modal-close" id="galleryModalClose" aria-label="Cerrar galeria">
+        Cerrar
+      </button>
+      <p class="eyebrow" id="galleryModalTag">Galeria del tour</p>
+      <h3 id="galleryModalTitle">Tour</h3>
+
+      <div class="gallery-modal-media">
+        <button type="button" class="gallery-nav gallery-prev" id="galleryModalPrev" aria-label="Imagen anterior">
+          &lsaquo;
+        </button>
+        <img id="galleryModalImage" class="gallery-modal-image" src="" alt="Imagen del tour" />
+        <button type="button" class="gallery-nav gallery-next" id="galleryModalNext" aria-label="Siguiente imagen">
+          &rsaquo;
+        </button>
+      </div>
+
+      <p class="gallery-counter" id="galleryModalCounter">1 / 1</p>
+      <a href="#reserva" id="galleryModalReserve" class="btn btn-primary btn-block">Reservar este tour</a>
+    </article>
+  </section>
+
+  <section class="tour-modal" id="tourModal" hidden>
+    <div class="tour-modal-backdrop" id="tourModalBackdrop"></div>
+    <article
+      class="tour-modal-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="tourModalTitle"
+      aria-describedby="tourModalDesc"
+    >
+      <button type="button" class="tour-modal-close" id="tourModalClose" aria-label="Cerrar detalles">
+        Cerrar
+      </button>
+      <p class="eyebrow" id="tourModalTag">Detalle del tour</p>
+      <h3 id="tourModalTitle">Tour</h3>
+      <p id="tourModalDesc"></p>
+
+      <div class="tour-modal-list-wrap">
+        <div>
+          <h4>Incluye</h4>
+          <ul id="tourModalIncludes" class="tour-modal-list"></ul>
+        </div>
+        <div>
+          <h4>No incluye</h4>
+          <ul id="tourModalExcludes" class="tour-modal-list"></ul>
+        </div>
+      </div>
+
+      <a href="#reserva" id="tourModalReserve" class="btn btn-primary btn-block">Reservar este tour</a>
+    </article>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Landing demo de tours | Personalizable con branding, precios reales y fotos oficiales del cliente.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="script.js"></script>
+</body>
+</html>
