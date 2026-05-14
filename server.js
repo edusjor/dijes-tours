@@ -119,7 +119,8 @@ app.post('/api/reservations', upload.single('proofFile'), async (req, res) => {
       return;
     }
 
-    const reservation = buildReservationPayload(req.body, req.file.filename);
+    const publicBaseUrl = resolvePublicBaseUrl(req);
+    const reservation = buildReservationPayload(req.body, req.file.filename, publicBaseUrl);
 
     await sendReservationEmails(reservation);
 
@@ -172,6 +173,32 @@ function normalizeBaseUrl(url) {
   return url.endsWith('/') ? url.slice(0, -1) : url;
 }
 
+function isLocalhostLikeUrl(url) {
+  try {
+    const parsed = new URL(url);
+    return parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1';
+  } catch (_error) {
+    return false;
+  }
+}
+
+function resolvePublicBaseUrl(req) {
+  if (PUBLIC_BASE_URL && !isLocalhostLikeUrl(PUBLIC_BASE_URL)) {
+    return PUBLIC_BASE_URL;
+  }
+
+  const forwardedProto = String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim();
+  const forwardedHost = String(req.headers['x-forwarded-host'] || '').split(',')[0].trim();
+  const protocol = forwardedProto || req.protocol || 'http';
+  const host = forwardedHost || req.get('host') || '';
+
+  if (!host) {
+    return PUBLIC_BASE_URL;
+  }
+
+  return normalizeBaseUrl(`${protocol}://${host}`);
+}
+
 function assertSmtpConfig() {
   const required = [
     ['SMTP_HOST', SMTP_HOST],
@@ -187,7 +214,7 @@ function assertSmtpConfig() {
   }
 }
 
-function buildReservationPayload(body, filename) {
+function buildReservationPayload(body, filename, publicBaseUrl) {
   const reservationId = `RSV-${Date.now()}`;
   const depositUsd = Number(body.depositUsd || body.deposit || 0);
   const depositCrc = Number(body.depositCrc || Math.round(depositUsd * EXCHANGE_RATE_CRC_PER_USD));
@@ -207,7 +234,7 @@ function buildReservationPayload(body, filename) {
     depositUsd,
     depositCrc,
     proofFileName: filename,
-    proofUrl: `${PUBLIC_BASE_URL}/comprobantes/${filename}`,
+    proofUrl: `${publicBaseUrl}/comprobantes/${filename}`,
     paymentInfo: {
       sinpe: PAYMENT_SINPE,
       owner: PAYMENT_OWNER,
@@ -414,7 +441,7 @@ function listTourImagesByFolder() {
       .map((fileName) => {
         const encodedFolder = encodeURIComponent(folderName);
         const encodedFile = encodeURIComponent(fileName);
-        return `${PUBLIC_BASE_URL}/tours/${encodedFolder}/${encodedFile}`;
+        return `/tours/${encodedFolder}/${encodedFile}`;
       });
 
     acc[folderName] = images;
